@@ -59,7 +59,7 @@ public class FiveDayForecastRepository {
             this.currentUnits = units;
             this.fiveDayForecast.setValue(null);
             this.loadingStatus.setValue(LoadingStatus.LOADING);
-            Call<FiveDayForecast> req = this.openWeatherService.fetchForecast(location, units, apiKey);
+            Call<FiveDayForecast> req = this.openWeatherService.fetchFlight(location, units, apiKey);
             req.enqueue(new Callback<FiveDayForecast>() {
                 @Override
                 public void onResponse(Call<FiveDayForecast> call, Response<FiveDayForecast> response) {

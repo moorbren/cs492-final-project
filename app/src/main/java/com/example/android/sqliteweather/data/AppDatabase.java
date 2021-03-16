@@ -25,7 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                             context.getApplicationContext(),
                             AppDatabase.class,
-                       "cities_search.db"
+                       "flights.db"
                     ).build();
                 }
             }
