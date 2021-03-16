@@ -15,16 +15,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FlightDataRepository {
     private static final String TAG = FlightDataRepository.class.getSimpleName();
-    private static final String BASE_URL = "https://api.aviationstack.com/v1/flights/";
+    private static final String BASE_URL = "http://api.aviationstack.com/v1/";
+    private static final String API_KEY = "cc6ab53163a7665b76614114d0740210";
+
 
     private MutableLiveData<RealtimeFlightDataContainer> realtimeFlightDataContainer;
     private MutableLiveData<LoadingStatus> loadingStatus;
 
-    private String currentLocation;
-    private String currentUnits;
+    private String currentDepartureCity;
+    private String currentArrivalCity;
+    private String currentFlightDate;
 
     private AviationStackService aviationStackService;
 
@@ -35,16 +39,14 @@ public class FlightDataRepository {
         this.loadingStatus = new MutableLiveData<>();
         this.loadingStatus.setValue(LoadingStatus.SUCCESS);
 
-        Gson gson = new GsonBuilder()
-                .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         this.aviationStackService = retrofit.create(AviationStackService.class);
     }
 
-    public LiveData<RealtimeFlightDataContainer> getFiveDayForecast() {
+    public LiveData<RealtimeFlightDataContainer> getRealtimeFlightDataContainer() {
         return this.realtimeFlightDataContainer;
     }
 
@@ -52,8 +54,8 @@ public class FlightDataRepository {
         return this.loadingStatus;
     }
 
-    public void loadFlight(String departureCity, String arrivalCity, String flightDate, String apiKey) {
-        if (shouldFetchForecast(departureCity, arrivalCity)) {
+    public void loadFlight(String departureCity, String arrivalCity, String flightDate) {
+        if (shouldFetchFlight(departureCity, arrivalCity, flightDate)) {
             Log.d(TAG, "fetching new forecast data for cities: " + arrivalCity + " " + departureCity + ", flightDate: " + flightDate);
 
             //this.currentLocation = location;
@@ -61,12 +63,14 @@ public class FlightDataRepository {
             this.realtimeFlightDataContainer.setValue(null);
             this.loadingStatus.setValue(LoadingStatus.LOADING);
 
-            Call<RealtimeFlightDataContainer> req = this.aviationStackService.fetchFlight(arrivalCity, departureCity, flightDate, apiKey);
-            req.enqueue(new Callback<RealtimeFlightDataContainer>() {
+            Call<String> req = this.aviationStackService.fetchFlight(arrivalCity, departureCity, API_KEY);
+            req.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<RealtimeFlightDataContainer> call, Response<RealtimeFlightDataContainer> response) {
+                public void onResponse(Call<String> call, Response<String> response) {
                     if (response.code() == 200) {
-                        realtimeFlightDataContainer.setValue(response.body());
+                        RealtimeFlightDataContainer dataContainer = new Gson().fromJson(response.body(), RealtimeFlightDataContainer.class);
+                        realtimeFlightDataContainer.setValue(dataContainer);
+
                         loadingStatus.setValue(LoadingStatus.SUCCESS);
                     } else {
                         loadingStatus.setValue(LoadingStatus.ERROR);
@@ -77,7 +81,7 @@ public class FlightDataRepository {
                 }
 
                 @Override
-                public void onFailure(Call<RealtimeFlightDataContainer> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
                     loadingStatus.setValue(LoadingStatus.ERROR);
                     Log.d(TAG, "unsuccessful API request: " + call.request().url());
                     t.printStackTrace();
@@ -88,9 +92,9 @@ public class FlightDataRepository {
         }
     }
 
-    private boolean shouldFetchForecast(String location, String units) {
+    private boolean shouldFetchFlight(String departureCity, String arrivalCity, String flightDate) {
         /*
-         * Fetch forecast if there isn't currently one stored.
+         * Fetch flight data if there isn't currently one stored.
          */
         RealtimeFlightDataContainer currentForecast = this.realtimeFlightDataContainer.getValue();
         if (currentForecast == null) {
@@ -98,16 +102,16 @@ public class FlightDataRepository {
         }
 
         /*
-         * Fetch forecast if there was an error fetching the last one.
+         * Fetch flight data if there was an error fetching the last one.
          */
         if (this.loadingStatus.getValue() == LoadingStatus.ERROR) {
             return true;
         }
 
         /*
-         * Fetch forecast if either location or units have changed.
+         * Fetch flight data if either location or units have changed.
          */
-        if (!TextUtils.equals(location, this.currentLocation) || !TextUtils.equals(units, this.currentUnits)) {
+        if (!TextUtils.equals(departureCity, this.currentDepartureCity) || !TextUtils.equals(arrivalCity, this.currentArrivalCity) || !TextUtils.equals(flightDate, this.currentFlightDate)) {
             return true;
         }
 
@@ -122,7 +126,7 @@ public class FlightDataRepository {
 //        }
 
         /*
-         * Otherwise, don't fetch the forecast.
+         * Otherwise, don't fetch the flight data.
          */
         return false;
     }

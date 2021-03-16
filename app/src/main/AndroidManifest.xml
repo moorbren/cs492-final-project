@@ -10,7 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BasicWeather">
+        android:theme="@style/Theme.BasicWeather"
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name="com.example.android.sqliteweather.SettingsActivity"
             android:parentActivityName="com.example.android.sqliteweather.MainActivity" />

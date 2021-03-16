@@ -7,13 +7,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface AviationStackService {
-    @GET("forecast")
-    Call<RealtimeFlightDataContainer> fetchFlight(
+    @GET("flights")
+    Call<String> fetchFlight(
             @Query("arr_iata") String arrivalIata,
             @Query("dep_iata") String departureIata,
 
             //YYYY-MM-DD, EX: 2019-02-31
-            @Query("flight_date") String destination,
+            //@Query("flight_date") String destination,
             @Query("access_key") String apiKey
     );
 }
