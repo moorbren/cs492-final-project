@@ -16,7 +16,7 @@
     <string name="forecast_date_time">%1$s, %2$s</string>
 
     <string name="action_map_title">View forecast location in map</string>
-    <string name="action_share_title">Share this forecast</string>
+    <string name="action_alarm_title">Aet an alarm for this flight</string>
     <string name="action_settings_title">Settings</string>
 
     <string name="geo_uri">geo:%1$f,%2$f?z=%3$d</string>

@@ -28,11 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sqliteweather.data.CitySearch;
-import com.example.android.sqliteweather.data.FiveDayForecast;
+import com.example.android.sqliteweather.data.FlightSearch;
 import com.example.android.sqliteweather.data.ForecastCity;
-import com.example.android.sqliteweather.data.ForecastData;
+import com.example.android.sqliteweather.data.FlightData;
 import com.example.android.sqliteweather.data.LoadingStatus;
-import com.google.android.material.navigation.NavigationView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -130,12 +129,12 @@ public class MainActivity extends AppCompatActivity
          */
         this.fiveDayForecastViewModel.getFiveDayForecast().observe(
                 this,
-                new Observer<FiveDayForecast>() {
+                new Observer<FlightSearch>() {
                     @Override
-                    public void onChanged(FiveDayForecast fiveDayForecast) {
-                        forecastAdapter.updateForecastData(fiveDayForecast);
-                        if (fiveDayForecast != null) {
-                            forecastCity = fiveDayForecast.getForecastCity();
+                    public void onChanged(FlightSearch flightSearch) {
+                        forecastAdapter.updateForecastData(flightSearch);
+                        if (flightSearch != null) {
+                            forecastCity = flightSearch.getForecastCity();
                             ActionBar actionBar = getSupportActionBar();
                             actionBar.setTitle(forecastCity.getName());
                         }
@@ -206,9 +205,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onForecastItemClick(ForecastData forecastData) {
+    public void onForecastItemClick(FlightData flightData) {
         Intent intent = new Intent(this, ForecastDetailActivity.class);
-        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_DATA, forecastData);
+        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_DATA, flightData);
         intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_CITY, this.forecastCity);
         startActivity(intent);
     }
@@ -222,9 +221,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_map:
-                viewForecastCityInMap();
-                return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
