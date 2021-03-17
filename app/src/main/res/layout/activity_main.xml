@@ -28,10 +28,10 @@
             android:textSize="22sp"
             android:hint="@string/departure_box_hint" />
 
-        <DatePicker
-            android:id="@+id/dp_departure_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+<!--        <DatePicker-->
+<!--            android:id="@+id/dp_departure_date"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
         <EditText
             android:id="@+id/et_destination_search_box"
