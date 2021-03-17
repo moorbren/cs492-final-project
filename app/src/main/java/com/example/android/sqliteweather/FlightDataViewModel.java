@@ -3,8 +3,6 @@ package com.example.android.sqliteweather;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.android.sqliteweather.data.FiveDayForecast;
-import com.example.android.sqliteweather.data.FiveDayForecastRepository;
 import com.example.android.sqliteweather.data.FlightDataRepository;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;

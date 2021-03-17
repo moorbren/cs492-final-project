@@ -133,6 +133,8 @@ public class MainActivity extends AppCompatActivity
                 new Observer<RealtimeFlightDataContainer>() {
                     @Override
                     public void onChanged(RealtimeFlightDataContainer realtimeFlightDataContainer) {
+
+
                         //forecastAdapter.updateForecastData(fiveDayForecast);
                         if (realtimeFlightDataContainer != null) {
                             //forecastCity = fiveDayForecast.getForecastCity();

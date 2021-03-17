@@ -1,6 +1,8 @@
 package com.example.android.sqliteweather.data.json;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class RealtimeFlightDataContainer implements Serializable {
@@ -40,6 +42,7 @@ public class RealtimeFlightDataContainer implements Serializable {
                 this.estimated = estimated;
                 this.actual = actual;
                 this.estimated_runway = estimated_runway;
+
             }
 
             public String getAirport() {
