@@ -23,6 +23,7 @@ import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class FlightDetailActivity extends AppCompatActivity {
     public static final String EXTRA_FLIGHT_DATA = "FlightDetailActivity.RealtimeFlightData";
@@ -111,14 +112,19 @@ public class FlightDetailActivity extends AppCompatActivity {
             flightnoTV.setText(this.flightData.flight.getNumber());
 
             TextView departtimeTV = findViewById(R.id.tv_departtime_detailed);
-            departtimeTV.setText(
-                    LocalDateTime.parse(
-                            this.flightData.departure.getScheduled(),
-                            DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                    ).format(
-                            DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
-                    )
-            );
+            departtimeTV.setText(this.flightData.departure.getScheduled());
+            try {
+                departtimeTV.setText(
+                        LocalDateTime.parse(
+                                this.flightData.departure.getScheduled(),
+                                DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                        ).format(
+                                DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
+                        )
+                );
+            }catch (DateTimeParseException e){
+
+            }
 
             TextView departureHeader = findViewById(R.id.tv_departure_header);
             departureHeader.setText("Departure Airport");

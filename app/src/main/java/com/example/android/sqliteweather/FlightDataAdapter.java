@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,12 +102,18 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
 
 
         public void bind(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
-            String s = LocalDateTime.parse(
-                    flightData.departure.getScheduled(),
-                    DateTimeFormatter.ISO_OFFSET_DATE_TIME
-            ).format(
-                    DateTimeFormatter.ofPattern("EEE, MMM d @ h:mm a")
-            );
+            String s = flightData.departure.scheduled;
+
+            try {
+                s = LocalDateTime.parse(
+                        flightData.departure.getScheduled(),
+                        DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                ).format(
+                        DateTimeFormatter.ofPattern("EEE, MMM d @ h:mm a")
+                );
+            }catch (DateTimeParseException e){
+
+            }
 
             departureDateTV.setText(s);
             departureIataTV.setText(flightData.departure.iata);

@@ -24,20 +24,22 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.sqliteweather.data.FavoritedFlights;
+import com.example.android.sqliteweather.data.FavoritedFlightsRepository;
+import com.example.android.sqliteweather.data.FavoritedFlightsViewModel;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity
         implements FlightDataAdapter.OnFlightItemClickListener,
             SharedPreferences.OnSharedPreferenceChangeListener{
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private FlightDataAdapter flightDataAdapter;
-    private FlightDataViewModel flightDataViewModel;
 
     private SharedPreferences sharedPreferences;
 
@@ -47,9 +49,15 @@ public class MainActivity extends AppCompatActivity
     private EditText dair;
     private EditText aair;
 
+    private FlightDataAdapter flightDataAdapter;
+    private FlightDataViewModel flightDataViewModel;
+
     private RecyclerView flightListRv;
     private ProgressBar loadingIndicatorPB;
     private TextView errorMessageTV;
+
+    FavoritedFlightsViewModel favoritedFlightsViewModel;
+    private List<FavoritedFlights> currentFavoritedFlights;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -71,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         this.flightListRv.setAdapter(this.flightDataAdapter);
         this.flightListRv.setItemAnimator(new DefaultItemAnimator());
 
+        this.favoritedFlightsViewModel = new FavoritedFlightsViewModel(getApplication());
 
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -112,17 +121,23 @@ public class MainActivity extends AppCompatActivity
 
         this.currentDepIata = this.dair.getText().toString();
         this.currentArrIata = this.aair.getText().toString();
-        loadFlights();
-        switch (item.getItemId()) {
-            /*case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;*/
-            case android.R.id.home:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            loadFlights();
+            return true;
+
+        } else if (id == R.id.saved_flights_button){
+            Intent i = new Intent(this, SavedFlightsActivity.class);
+            i.putExtra(SavedFlightsActivity.EXTRA_FLIGHT_DATA, new Gson().toJson(currentFavoritedFlights));
+            this.startActivity(i);
+
+
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -197,6 +212,13 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
         );
+
+        this.favoritedFlightsViewModel.getAllFavorites().observe(this, new Observer<List<FavoritedFlights>>() {
+            @Override
+            public void onChanged(List<FavoritedFlights> favoritedFlights) {
+                currentFavoritedFlights = favoritedFlights;
+            }
+        });
 
     }
 

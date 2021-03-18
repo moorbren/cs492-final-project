@@ -1,5 +1,7 @@
 package com.example.android.sqliteweather.data.json;
 
+import com.example.android.sqliteweather.data.FavoritedFlights;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,21 @@ public class RealtimeFlightDataContainer implements Serializable {
 
     public RealtimeFlightData[] data;
 
+    public RealtimeFlightDataContainer(List<FavoritedFlights> flights){
+        data = new RealtimeFlightData[flights.size()];
+        for(int i = 0; i < data.length; i++){
+            FavoritedFlights f = flights.get(i);
+
+            String[] s = f.departureNum.replace(" | ", ",").split(",");
+            String departDate = s[0];
+            String flightNummm = s[1];
+
+
+            RealtimeFlightData convertedFlight = new RealtimeFlightData(departDate, f.airline, f.departure, f.arrival, flightNummm);
+            data[i] = convertedFlight;
+        }
+    }
+
     public class RealtimeFlightData implements Serializable {
         public Departure departure;
         public Arrival arrival;
@@ -16,6 +33,13 @@ public class RealtimeFlightDataContainer implements Serializable {
         public Flight flight;
         public Aircraft aircraft;
         public Live live;
+
+        public RealtimeFlightData(String departureNum, String airline, String departure, String arrival, String flightNum){
+            this.departure = new Departure(departure, departureNum);
+            this.arrival = new Arrival(arrival);
+            this.airline = new Airline(airline);
+            this.flight = new Flight(flightNum);
+        }
 
         public class Departure implements Serializable {
             public String airport;
@@ -43,6 +67,11 @@ public class RealtimeFlightDataContainer implements Serializable {
                 this.actual = actual;
                 this.estimated_runway = estimated_runway;
 
+            }
+
+            public Departure(String iata, String scheduled){
+                this.iata = iata;
+                this.scheduled = scheduled;
             }
 
             public String getAirport() {
@@ -163,6 +192,10 @@ public class RealtimeFlightDataContainer implements Serializable {
                 this.estimated_runway = estimated_runway;
             }
 
+            public Arrival(String iata) {
+                this.iata = iata;
+            }
+
             public String getAirport() {
                 return airport;
             }
@@ -271,6 +304,10 @@ public class RealtimeFlightDataContainer implements Serializable {
                 this.icao = icao;
             }
 
+            public Airline(String name) {
+                this.name = name;
+            }
+
             public String getName() {
                 return name;
             }
@@ -305,6 +342,10 @@ public class RealtimeFlightDataContainer implements Serializable {
                 this.number = number;
                 this.iata = iata;
                 this.icao = icao;
+            }
+
+            public Flight(String number) {
+                this.number = number;
             }
 
             public String getNumber() {
