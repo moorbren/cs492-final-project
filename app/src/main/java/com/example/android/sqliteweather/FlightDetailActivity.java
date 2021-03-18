@@ -32,6 +32,7 @@ public class FlightDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_flight_detail); //sets layout to specified XML
         imgClick = (ImageView)findViewById(R.id.itm_alarm);
 
