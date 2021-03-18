@@ -33,6 +33,7 @@ public class Alarm extends BroadcastReceiver {
 
         alarm.set(AlarmManager.RTC_WAKEUP, mil, pendingIntent);
         Log.d("alarm", "Alarm is set for flight time");
+        Toast.makeText(context, "Alarm is Set!", Toast.LENGTH_LONG).show();
     }
 
     @Override
