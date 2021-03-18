@@ -158,12 +158,16 @@ public class MainActivity extends AppCompatActivity
 
                         if (realtimeFlightDataContainer != null && realtimeFlightDataContainer.data != null) {
                             Log.d(TAG, realtimeFlightDataContainer.data.length + "");
+                            if (realtimeFlightDataContainer.data.length < 1){
+                                Log.e(TAG, "No search results found");
+                            }
+                            else {
+                                flightDataAdapter.updateFlightData(realtimeFlightDataContainer);
 
-                            flightDataAdapter.updateFlightData(realtimeFlightDataContainer);
-
-                            //forecastCity = fiveDayForecast.getForecastCity();
-                            ActionBar actionBar = getSupportActionBar();
-                            actionBar.setTitle(realtimeFlightDataContainer.data[0].departure.getAirport());
+                                //forecastCity = fiveDayForecast.getForecastCity();
+                                ActionBar actionBar = getSupportActionBar();
+                                actionBar.setTitle(realtimeFlightDataContainer.data[0].departure.getAirport());
+                            }
                         }
                     }
                 }
