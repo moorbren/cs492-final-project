@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,6 +123,10 @@ public class MainActivity extends AppCompatActivity
                 return true;*/
             case android.R.id.home:
                 return true;
+            case R.id.action_map:
+                viewHotelsInMap(this.currentArrIata);
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -205,4 +212,36 @@ public class MainActivity extends AppCompatActivity
         this.flightDataViewModel.loadFlight(currentDepIata, currentArrIata, "");
     }
 
+    /**
+     * This function uses an implicit intent to view the forecast city in a map.
+     */
+    private void viewHotelsInMap(String currentArrIata) {
+        Log.d("Here", "AAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHH");
+        Log.d("maps", currentArrIata);
+        Log.d("Here", "AAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHH");
+        if (this.currentArrIata != null) {
+            Uri forecastCityGeoUri = Uri.parse(getString(
+                    R.string.geo_uri,
+                    0,0,
+                    "JFK",
+                    12
+            ));
+            Log.d("maps URI", String.valueOf(forecastCityGeoUri));
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, forecastCityGeoUri);
+//            try {
+//                startActivity(intent);
+//            } catch (ActivityNotFoundException e) {
+//                if (this.errorToast != null) {
+//                    this.errorToast.cancel();
+//                }
+//                this.errorToast = Toast.makeText(
+//                        this,
+//                        getString(R.string.action_map_error),
+//                        Toast.LENGTH_LONG
+//                );
+//                this.errorToast.show();
+//            }
+        }
+    }
 }
