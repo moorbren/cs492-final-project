@@ -2,19 +2,16 @@ package com.example.android.sqliteweather.data;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
+public class FavoritedFlightsRepository {
 
-import java.util.List;
+    private FlightsDao dao;
 
-public class CitySearchRepository {
-    private CitiesDao dao;
-
-    public CitySearchRepository(Application application){
+    public FavoritedFlightsRepository (Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
-//        this.dao = db.citiesDao();
+        this.dao = db.flightsDao();
     }
 
-    public void insertCitySearch (CitySearch search) {
+    public void insertCitySearch (FavoritedFlights search) {
         AppDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -23,16 +20,12 @@ public class CitySearchRepository {
         });
     }
 
-    public void deleteCitySearch (CitySearch search) {
+    public void deleteCitySearch (FavoritedFlights search) {
         AppDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 dao.delete(search);
             }
         });
-    }
-
-    public LiveData<List<CitySearch>> getAllCities () {
-        return this.dao.getAllCities();
     }
 }
