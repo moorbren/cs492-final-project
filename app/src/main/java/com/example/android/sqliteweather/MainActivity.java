@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -59,7 +63,6 @@ public class MainActivity extends AppCompatActivity
     FavoritedFlightsViewModel favoritedFlightsViewModel;
     private List<FavoritedFlights> currentFavoritedFlights;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,9 +100,26 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.searchbtn_light);
+        actionBar.setHomeAsUpIndicator(R.drawable.searchbtn_light);*/
+
+
+        /*imgClick = findViewById(R.id.itm_alarm);
+
+        imgClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Alarm a = new Alarm();
+                try {
+                    a.setAlarm(flightData.departure.getScheduled(),getApplicationContext());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Log.d("alarmcall", "Parse error");
+                }
+                Log.d("flightdetailtest", "You need to set an alarm when you see this!");
+            }
+        });*/
     }
 
     @Override
@@ -128,11 +148,15 @@ public class MainActivity extends AppCompatActivity
             loadFlights();
             return true;
 
-        } else if (id == R.id.saved_flights_button){
+        } else if (id == R.id.saved_flights_button) {
             Intent i = new Intent(this, SavedFlightsActivity.class);
             i.putExtra(SavedFlightsActivity.EXTRA_FLIGHT_DATA, new Gson().toJson(currentFavoritedFlights));
             this.startActivity(i);
 
+
+            return true;
+        } else if(R.id.action_map == id){
+            viewHotelsInMap(this.currentArrIata);
 
             return true;
         }
@@ -227,4 +251,38 @@ public class MainActivity extends AppCompatActivity
         this.flightDataViewModel.loadFlight(currentDepIata, currentArrIata, "");
     }
 
+    /**
+     * This function uses an implicit intent to view the forecast city in a map.
+     */
+    private void viewHotelsInMap(String currentArrIata) {
+        if (this.currentArrIata != null) {
+            Uri forecastCityGeoUri = Uri.parse(getString(
+                    R.string.geo_uri,
+                    0, 0,
+                    this.currentArrIata + " airport hotels"
+            ));
+            Log.d("maps URI", String.valueOf(forecastCityGeoUri));
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, forecastCityGeoUri);
+            startActivity(intent);
+//            try {
+//            } catch (ActivityNotFoundException e) {
+//                if (this.errorToast != null) {
+//                    this.errorToast.cancel();
+//                }
+//                this.errorToast = Toast.makeText(
+//                        this,
+//                        getString(R.string.action_map_error),
+//                        Toast.LENGTH_LONG
+//                );
+//                this.errorToast.show();
+//            }
+        }
+    }
+
+    public void onLogOutClick (MenuItem item){
+        this.currentDepIata = this.dair.getText().toString();
+        this.currentArrIata = this.aair.getText().toString();
+        loadFlights();
+    }
 }
