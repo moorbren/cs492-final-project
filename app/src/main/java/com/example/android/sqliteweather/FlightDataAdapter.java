@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.FlightItemViewHolder> {
-    private RealtimeFlightDataContainer.RealtimeFlightData flightData;
+    private RealtimeFlightDataContainer flightData;
     private OnFlightItemClickListener onFlightItemClickListener;
 
     public interface OnFlightItemClickListener {
@@ -58,11 +58,9 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         return 0;
     }
 
-<<<<<<< HEAD
-    public void updateFlightData(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
-=======
+
     public void updateFlightData(RealtimeFlightDataContainer flightData) {
->>>>>>> 2b59e9eed872ca9297ec31e45b34d6d7cd903c32
+
         this.flightData = flightData;
         notifyDataSetChanged();
     }

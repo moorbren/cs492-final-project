@@ -14,4 +14,19 @@ public class FavoritedFlights implements Serializable {
     @PrimaryKey
     @NonNull
     public String departureNum;
+
+//    public String airline;
+//
+//    public String departure;
+//
+//    public String arrival;
+//
+//    public String flightNumber;
+
+
+
+    public FavoritedFlights (String departureNum) {
+        this.departureNum=departureNum;
+    }
+
 }

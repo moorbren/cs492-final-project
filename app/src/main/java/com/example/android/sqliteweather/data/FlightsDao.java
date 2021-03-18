@@ -16,6 +16,6 @@ public interface FlightsDao {
     @Delete
     void delete (FavoritedFlights flight);
 
-    @Query("SELECT * FROM cities")
+    @Query("SELECT * FROM flights")
     LiveData<List<FavoritedFlights>> getAllFavorites();
 }
