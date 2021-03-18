@@ -1,21 +1,28 @@
 package com.example.android.sqliteweather;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
+import java.util.TimeZone;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.FlightItemViewHolder> {
     private RealtimeFlightDataContainer flightData;
     private OnFlightItemClickListener onFlightItemClickListener;
@@ -57,14 +64,16 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
     }
 
     class FlightItemViewHolder extends RecyclerView.ViewHolder {
-        final private TextView departureTV;
-        final private TextView arrivalTV;
+        final private TextView departureIataTV;
+        final private TextView departureDateTV;
+        final private TextView arrivalIataTV;
         final private TextView flightNumTV;
 
         public FlightItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            departureTV = itemView.findViewById(R.id.tv_departure_city);
-            arrivalTV = itemView.findViewById(R.id.tv_arrival_city);
+            departureDateTV = itemView.findViewById(R.id.tv_departure_date);
+            departureIataTV = itemView.findViewById(R.id.tv_departure_iata);
+            arrivalIataTV = itemView.findViewById(R.id.tv_arrival_iata);
             flightNumTV = itemView.findViewById(R.id.tv_flight_number);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +86,20 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
             });
         }
 
+
         public void bind(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
 
-            departureTV.setText(flightData.departure.airport);
-            arrivalTV.setText(flightData.arrival.airport);
-            flightNumTV.setText(flightData.flight.number);
+            String s = LocalDateTime.parse(
+                    flightData.departure.getScheduled(),
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME
+            ).format(
+                    DateTimeFormatter.ofPattern("EEE, MMM d @ h:mm a")
+            );
+
+            departureDateTV.setText(s);
+            departureIataTV.setText(flightData.departure.iata);
+            arrivalIataTV.setText(flightData.arrival.iata);
+            flightNumTV.setText("#" + flightData.flight.number);
         }
 
     }
