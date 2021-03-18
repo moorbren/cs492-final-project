@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -42,6 +43,13 @@ public class FlightDetailActivity extends AppCompatActivity {
         imgClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Alarm a = new Alarm();
+                try {
+                    a.setAlarm(flightData.departure.getScheduled(),getApplicationContext());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Log.d("alarmcall", "Parse error");
+                }
                 Log.d("flightdetailtest", "You need to set an alarm when you see this!");
             }
         });
