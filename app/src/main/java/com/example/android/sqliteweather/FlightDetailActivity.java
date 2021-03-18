@@ -49,9 +49,8 @@ public class FlightDetailActivity extends AppCompatActivity {
                     a.setAlarm(flightData.departure.getScheduled(),getApplicationContext());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Log.d("alarmcall", "Parse error");
+                    Log.d("alarm", "Parse error");
                 }
-                Log.d("flightdetailtest", "You need to set an alarm when you see this!");
             }
         });
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
