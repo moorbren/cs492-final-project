@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_share"
-        android:title="@string/action_share_title"
-        android:icon="@drawable/ic_action_share"
+        android:id="@+id/action_favorite"
+        android:title="@string/action_favorite_title"
+        android:icon="@drawable/ic_favorite_button_light"
         app:showAsAction="ifRoom" />
 </menu>

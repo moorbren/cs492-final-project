@@ -76,7 +76,7 @@
         <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <!--        <TextView-->
-        <!--            android:id="@+id/tv_low_temp"-->
+        <!--            android:id="@+id/tv_departure_detailed"-->
         <!--            android:layout_width="wrap_content"-->
         <!--            android:layout_height="wrap_content"-->
         <!--            android:textAppearance="@style/TextAppearance.CS492Weather.LowTempSmall"-->
@@ -92,8 +92,8 @@
         <!--            android:gravity="center_vertical"-->
         <!--            android:orientation="horizontal"-->
         <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/tv_high_temp"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/tv_low_temp"-->
+        <!--            app:layout_constraintEnd_toStartOf="@id/tv_arrival_detailed"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/tv_departure_detailed"-->
         <!--            app:layout_constraintTop_toBottomOf="@id/barrier2">-->
 
         <!--            <ImageView-->
@@ -104,14 +104,14 @@
         <!--                app:tint="@color/black" />-->
 
         <!--            <TextView-->
-        <!--                android:id="@+id/tv_pop"-->
+        <!--                android:id="@+id/tv_airline_detailed"-->
         <!--                android:layout_width="match_parent"-->
         <!--                android:layout_height="match_parent"-->
         <!--                android:textAppearance="?attr/textAppearanceBody1" />-->
         <!--        </LinearLayout>-->
 
         <!--        <TextView-->
-        <!--            android:id="@+id/tv_high_temp"-->
+        <!--            android:id="@+id/tv_arrival_detailed"-->
         <!--            android:layout_width="wrap_content"-->
         <!--            android:layout_height="wrap_content"-->
         <!--            android:layout_marginStart="8dp"-->
@@ -133,7 +133,7 @@
         <!--            android:layout_width="wrap_content"-->
         <!--            android:layout_height="wrap_content"-->
         <!--            app:barrierDirection="top"-->
-        <!--            app:constraint_referenced_ids="tv_high_temp,tv_low_temp" />-->
+        <!--            app:constraint_referenced_ids="tv_arrival_detailed,tv_departure_detailed" />-->
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

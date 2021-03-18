@@ -1,120 +1,113 @@
 package com.example.android.sqliteweather;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.android.sqliteweather.data.ForecastCity;
-import com.example.android.sqliteweather.data.ForecastData;
-import com.example.android.sqliteweather.utils.OpenWeatherUtils;
+import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class ForecastDetailActivity extends AppCompatActivity {
-    public static final String EXTRA_FORECAST_DATA = "ForecastDetailActivity.ForecastData";
-    public static final String EXTRA_FORECAST_CITY = "ForecastDetailActivity.ForecastCity";
+public class FlightDetailActivity extends AppCompatActivity {
+    public static final String EXTRA_FLIGHT_DATA = "FlightDetailActivity.RealtimeFlightData";
+    //public static final String EXTRA_FORECAST_CITY = "FlightDetailActivity.ForecastCity";
 
-    private ForecastData forecastData = null;
-    private ForecastCity forecastCity = null;
+    private RealtimeFlightDataContainer.RealtimeFlightData flightData = null;
+    //private ForecastCity forecastCity = null;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forecast_detail);
+        setContentView(R.layout.activity_flight_detail); //sets layout to specified XML
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Intent intent = getIntent();
 
-        if (intent != null && intent.hasExtra(EXTRA_FORECAST_CITY)) {
+        /*if (intent != null && intent.hasExtra(EXTRA_FORECAST_CITY)) {
             this.forecastCity = (ForecastCity)intent.getSerializableExtra(EXTRA_FORECAST_CITY);
             TextView forecastCityTV = findViewById(R.id.tv_forecast_city);
             forecastCityTV.setText(this.forecastCity.getName());
-        }
+        }*/
 
-        if (intent != null && intent.hasExtra(EXTRA_FORECAST_DATA)) {
-            this.forecastData = (ForecastData)intent.getSerializableExtra(EXTRA_FORECAST_DATA);
+        if (intent != null && intent.hasExtra(EXTRA_FLIGHT_DATA)) {
+            this.flightData = (RealtimeFlightDataContainer.RealtimeFlightData) intent.getSerializableExtra(EXTRA_FLIGHT_DATA);
 
-            /*
-             * Load forecast icon into ImageView using Glide: https://bumptech.github.io/glide/
-             */
-            ImageView forecastIconIV = findViewById(R.id.iv_forecast_icon);
+            /*ImageView forecastIconIV = findViewById(R.id.iv_forecast_icon);
             Glide.with(this)
                     .load(this.forecastData.getIconUrl())
-                    .into(forecastIconIV);
+                    .into(forecastIconIV);*/
 
-            TextView forecastDateTV = findViewById(R.id.tv_forecast_date);
-            Calendar date = OpenWeatherUtils.dateFromEpochAndTZOffset(
+            //TextView forecastDateTV = findViewById(R.id.tv_forecast_date);
+            /*Calendar date = OpenWeatherUtils.dateFromEpochAndTZOffset(
                     forecastData.getEpoch(),
                     forecastCity.getTimezoneOffsetSeconds()
-            );
+            );*/
+            /*
             forecastDateTV.setText(getString(
                     R.string.forecast_date_time,
                     getString(R.string.forecast_date, date),
                     getString(R.string.forecast_time, date)
             ));
-
+            */
+            /*
             String unitsPref = sharedPreferences.getString(
                     getString(R.string.pref_units_key),
                     getString(R.string.pref_units_default_value)
+            );*/
+            TextView departureTV = findViewById(R.id.tv_departure_detailed);
+            departureTV.setText(
+                    this.flightData.departure.getAirport()
             );
-            TextView lowTempTV = findViewById(R.id.tv_low_temp);
-            lowTempTV.setText(getString(
-                    R.string.forecast_temp,
-                    forecastData.getLowTemp(),
-                    /* get correct temperature unit for unit preference setting */
-                    OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
-            ));
 
-            TextView highTempTV = findViewById(R.id.tv_high_temp);
-            highTempTV.setText(getString(
-                    R.string.forecast_temp,
-                    forecastData.getHighTemp(),
-                    /* get correct temperature unit for unit preference setting */
-                    OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
-            ));
+            TextView arrivalTV = findViewById(R.id.tv_arrival_detailed);
+            arrivalTV.setText(this.flightData.arrival.getAirport());
 
-            TextView popTV = findViewById(R.id.tv_pop);
-            popTV.setText(getString(R.string.forecast_pop, forecastData.getPop()));
+            TextView airlineTV = findViewById(R.id.tv_airline_detailed);
+            airlineTV.setText(this.flightData.airline.getName());
 
-            TextView cloudsTV = findViewById(R.id.tv_clouds);
-            cloudsTV.setText(getString(R.string.forecast_clouds, forecastData.getCloudCoverage()));
+            TextView flightnoTV = findViewById(R.id.tv_flightno_detailed);
+            flightnoTV.setText(this.flightData.flight.getNumber());
 
-            TextView windTV = findViewById(R.id.tv_wind);
-            windTV.setText(getString(
-                    R.string.forecast_wind,
-                    forecastData.getWindSpeed(),
-                    /* get correct wind speed unit for unit preference setting */
-                    OpenWeatherUtils.getWindSpeedDisplayForUnitsPref(unitsPref, this)
-            ));
-
+            TextView departtimeTV = findViewById(R.id.tv_departtime_detailed);
+            departtimeTV.setText(
+                    LocalDateTime.parse(
+                            this.flightData.departure.getScheduled(),
+                            DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                    ).format(
+                            DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
+                    )
+            );
+            /*
             ImageView windDirIV = findViewById(R.id.iv_wind_dir);
-            windDirIV.setRotation(forecastData.getWindDirDeg());
+            windDirIV.setRotation(flightData.getWindDirDeg());
 
             TextView forecastDescriptionTV = findViewById(R.id.tv_forecast_description);
-            forecastDescriptionTV.setText(forecastData.getShortDescription());
+            forecastDescriptionTV.setText(flightData.getShortDescription());*/
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_forecast_detail, menu);
+        getMenuInflater().inflate(R.menu.activity_flight_detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_share:
-                shareForecastText();
+            case R.id.action_favorite:
+                //shareForecastText();
+                Log.d("flightdetailtest", "You need to add this to the database when you see this!");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -125,12 +118,13 @@ public class ForecastDetailActivity extends AppCompatActivity {
      * This method uses an implicit intent to launch the Android Sharesheet to allow the user to
      * share the current forecast.
      */
+    /*
     private void shareForecastText() {
-        if (this.forecastData != null && this.forecastCity != null) {
+        if (this.forecastData != null) { //&& this.forecastCity != null
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             Calendar date = OpenWeatherUtils.dateFromEpochAndTZOffset(
                     forecastData.getEpoch(),
-                    forecastCity.getTimezoneOffsetSeconds()
+                    //forecastCity.getTimezoneOffsetSeconds()
             );
             String unitsPref = sharedPreferences.getString(
                     getString(R.string.pref_units_key),
@@ -139,7 +133,8 @@ public class ForecastDetailActivity extends AppCompatActivity {
             String shareText = getString(
                     R.string.share_forecast_text,
                     getString(R.string.app_name),
-                    this.forecastCity.getName(),
+                    //this.forecastCity.getName(),
+                    "dummy",
                     getString(
                             R.string.forecast_date_time,
                             getString(R.string.forecast_date, date),
@@ -149,13 +144,11 @@ public class ForecastDetailActivity extends AppCompatActivity {
                     getString(
                             R.string.forecast_temp,
                             forecastData.getHighTemp(),
-                            /* get correct temperature unit for unit preference setting */
                             OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
                     ),
                     getString(
                             R.string.forecast_temp,
                             forecastData.getLowTemp(),
-                            /* get correct temperature unit for unit preference setting */
                             OpenWeatherUtils.getTemperatureDisplayForUnitsPref(unitsPref, this)
                     ),
                     getString(R.string.forecast_pop, this.forecastData.getPop())
@@ -168,5 +161,5 @@ public class ForecastDetailActivity extends AppCompatActivity {
             Intent chooserIntent = Intent.createChooser(sendIntent, null);
             startActivity(chooserIntent);
         }
-    }
+    }*/
 }

@@ -5,8 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -24,15 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.sqliteweather.data.CitySearch;
-import com.example.android.sqliteweather.data.ForecastData;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements FlightDataAdapter.OnFlightItemClickListener,
@@ -109,9 +104,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFlightItemClick(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
-        Intent intent = new Intent(this, ForecastDetailActivity.class);
-        intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_DATA, flightData);
-        //intent.putExtra(ForecastDetailActivity.EXTRA_FORECAST_CITY, this.forecastCity);
+        Intent intent = new Intent(this, FlightDetailActivity.class);
+        intent.putExtra(FlightDetailActivity.EXTRA_FLIGHT_DATA, flightData);
+        //intent.putExtra(FlightDetailActivity.EXTRA_FORECAST_CITY, this.forecastCity);
         startActivity(intent);
     }
 
