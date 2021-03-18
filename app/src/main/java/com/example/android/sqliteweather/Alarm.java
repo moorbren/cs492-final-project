@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 import android.widget.Toast;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,12 +25,14 @@ public class Alarm extends BroadcastReceiver {
         pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         //convert string date from API to epoch
-        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date = s.parse(s_date);
         long mil = date.getTime();
 
-        alarm.set(AlarmManager.RTC_WAKEUP, mil, pendingIntent);
+        //long mil = System.currentTimeMillis();
 
+        alarm.set(AlarmManager.RTC_WAKEUP, mil, pendingIntent);
+        Log.d("alarm", "Alarm is set for flight time");
     }
 
     @Override
@@ -38,7 +41,7 @@ public class Alarm extends BroadcastReceiver {
         @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock wake = p.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "wake");
         wake.acquire();
 
-        Toast.makeText(context, "FLight!", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Flight!", Toast.LENGTH_LONG).show();
 
         wake.release();
     }
