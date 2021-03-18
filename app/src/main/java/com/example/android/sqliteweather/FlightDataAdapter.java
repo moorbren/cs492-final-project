@@ -22,6 +22,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.TimeZone;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.FlightItemViewHolder> {
     private RealtimeFlightDataContainer.RealtimeFlightData flightData;
     private OnFlightItemClickListener onFlightItemClickListener;
@@ -89,7 +90,7 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
             });
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
+
         public void bind(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
 
             String s = LocalDateTime.parse(
