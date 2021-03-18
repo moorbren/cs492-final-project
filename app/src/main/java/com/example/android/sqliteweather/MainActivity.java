@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import com.example.android.sqliteweather.data.CitySearch;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity
@@ -43,16 +45,21 @@ public class MainActivity extends AppCompatActivity
     private String currentDepIata = "LAX";
     private String currentArrIata = "JFK";
 
+    private EditText dair;
+    private EditText aair;
+
     private RecyclerView flightListRv;
     private ProgressBar loadingIndicatorPB;
     private TextView errorMessageTV;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        this.dair = findViewById(R.id.et_departure_search_box);
+        this.aair = findViewById(R.id.et_destination_search_box);
         this.loadingIndicatorPB = findViewById(R.id.pb_loading_indicator);
         this.errorMessageTV = findViewById(R.id.tv_error_message);
 
@@ -115,20 +122,24 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-/*
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        this.currentDepIata = this.dair.getText().toString();
+        this.currentArrIata = this.aair.getText().toString();
+        loadFlights();
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            /*case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-                return true;
+                return true;*/
             case android.R.id.home:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }*/
+    }
 
     @Override
     protected void onDestroy() {
@@ -136,24 +147,23 @@ public class MainActivity extends AppCompatActivity
         this.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected (@NonNull MenuItem item){
-//        this.drawerLayout.closeDrawers();
-//        switch (item.getItemId()) {
-//            case R.id.nav_search:
+/*    @Override
+    public boolean onNavigationItemSelected (@NonNull MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.nav_search:
+                return true;
+//            case R.id.nav_bookmarked_repos:
+//                Intent bookmarkedReposIntent = new Intent(this,BookmarkedRepos.class);
+//                startActivity(bookmarkedReposIntent);
 //                return true;
-////            case R.id.nav_bookmarked_repos:
-////                Intent bookmarkedReposIntent = new Intent(this,BookmarkedRepos.class);
-////                startActivity(bookmarkedReposIntent);
-////                return true;
-//            case R.id.nav_settings:
-//                Intent settingsIntent = new Intent (this,SettingsActivity.class);
-//                startActivity(settingsIntent);
+            case R.id.nav_settings:
+                Intent settingsIntent = new Intent (this,SettingsActivity.class);
+                startActivity(settingsIntent);
 //                return true;
-//            default:
-//                return false;
-//        }
-//    }
+            default:
+                return false;
+        }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -175,6 +185,7 @@ public class MainActivity extends AppCompatActivity
         this.flightDataViewModel.getRealtimeFlightDataContainer().observe(
                 this,
                 new Observer<RealtimeFlightDataContainer>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onChanged(RealtimeFlightDataContainer realtimeFlightDataContainer) {
 
