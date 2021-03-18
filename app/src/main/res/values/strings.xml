@@ -25,7 +25,7 @@
     <string name="action_favorite_title">Favorite this flight</string>
     <string name="action_settings_title">Settings</string>
 
-    <string name="geo_uri">geo:%1$d,%2$d?q=%3$s?z=%4$d</string>
+    <string name="geo_uri">geo:%1$d,%2$d?q=%3$s</string>
 
     <string name="share_forecast_text">Weather forecast from %1$s for %2$s, %3$s: %4$s with a high of %5$s, a low of %6$s, and a %7$s chance of precipitation.</string>
 

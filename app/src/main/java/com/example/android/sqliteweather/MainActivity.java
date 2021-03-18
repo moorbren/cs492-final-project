@@ -234,21 +234,17 @@ public class MainActivity extends AppCompatActivity
      * This function uses an implicit intent to view the forecast city in a map.
      */
     private void viewHotelsInMap(String currentArrIata) {
-        Log.d("Here", "AAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHH");
-        Log.d("maps", currentArrIata);
-        Log.d("Here", "AAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHH");
         if (this.currentArrIata != null) {
             Uri forecastCityGeoUri = Uri.parse(getString(
                     R.string.geo_uri,
-                    0,0,
-                    "JFK",
-                    12
+                    0, 0,
+                    "JFK airport hotels"
             ));
             Log.d("maps URI", String.valueOf(forecastCityGeoUri));
 
             Intent intent = new Intent(Intent.ACTION_VIEW, forecastCityGeoUri);
+            startActivity(intent);
 //            try {
-//                startActivity(intent);
 //            } catch (ActivityNotFoundException e) {
 //                if (this.errorToast != null) {
 //                    this.errorToast.cancel();
@@ -261,10 +257,11 @@ public class MainActivity extends AppCompatActivity
 //                this.errorToast.show();
 //            }
         }
+    }
 
-//    public void onLogOutClick(MenuItem item) {
-//        this.currentDepIata = this.dair.getText().toString();
-//        this.currentArrIata = this.aair.getText().toString();
-//        loadFlights();
+    public void onLogOutClick (MenuItem item){
+        this.currentDepIata = this.dair.getText().toString();
+        this.currentArrIata = this.aair.getText().toString();
+        loadFlights();
     }
 }
