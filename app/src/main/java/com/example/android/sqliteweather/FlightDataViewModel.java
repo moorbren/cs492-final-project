@@ -1,18 +1,22 @@
 package com.example.android.sqliteweather;
+
+
+import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 import com.example.android.sqliteweather.data.FlightDataRepository;
 import com.example.android.sqliteweather.data.LoadingStatus;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 public class FlightDataViewModel extends ViewModel {
     private FlightDataRepository repository;
     private LiveData<RealtimeFlightDataContainer> flightData;
+
     private LiveData<LoadingStatus> loadingStatus;
 
     public FlightDataViewModel() {
         this.repository = new FlightDataRepository();
         flightData = repository.getRealtimeFlightDataContainer();
+        realtimeFlightDataContainer = repository.getRealtimeFlightDataContainer();
         loadingStatus = repository.getLoadingStatus();
     }
 

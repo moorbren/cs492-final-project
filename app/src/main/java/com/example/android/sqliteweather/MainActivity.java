@@ -28,11 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sqliteweather.data.CitySearch;
-import com.example.android.sqliteweather.data.FiveDayForecast;
 import com.example.android.sqliteweather.data.ForecastCity;
 import com.example.android.sqliteweather.data.ForecastData;
 import com.example.android.sqliteweather.data.LoadingStatus;
-import com.google.android.material.navigation.NavigationView;
+import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     private static final String OPENWEATHER_APPID = "4c01bcf287f5d2b193d2b41f01597810";
 
     private ForecastAdapter forecastAdapter;
-    private FiveDayForecastViewModel fiveDayForecastViewModel;
+    private FlightDataViewModel flightDataViewModel;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -121,23 +120,26 @@ public class MainActivity extends AppCompatActivity
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
-        this.fiveDayForecastViewModel = new ViewModelProvider(this)
-                .get(FiveDayForecastViewModel.class);
-        this.loadForecast();
+        this.flightDataViewModel = new ViewModelProvider(this)
+                .get(FlightDataViewModel.class);
+
+        this.loadFlights();
 
         /*
          * Update UI to reflect newly fetched forecast data.
          */
-        this.fiveDayForecastViewModel.getFiveDayForecast().observe(
+        this.flightDataViewModel.getRealtimeFlightDataContainer().observe(
                 this,
-                new Observer<FiveDayForecast>() {
+                new Observer<RealtimeFlightDataContainer>() {
                     @Override
-                    public void onChanged(FiveDayForecast fiveDayForecast) {
-                        forecastAdapter.updateForecastData(fiveDayForecast);
-                        if (fiveDayForecast != null) {
-                            forecastCity = fiveDayForecast.getForecastCity();
+                    public void onChanged(RealtimeFlightDataContainer realtimeFlightDataContainer) {
+
+
+                        //forecastAdapter.updateForecastData(fiveDayForecast);
+                        if (realtimeFlightDataContainer != null) {
+                            //forecastCity = fiveDayForecast.getForecastCity();
                             ActionBar actionBar = getSupportActionBar();
-                            actionBar.setTitle(forecastCity.getName());
+                            actionBar.setTitle(realtimeFlightDataContainer.data[0].departure.getAirport());
                         }
                     }
                 }
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         /*
          * Update UI to reflect changes in loading status.
          */
-        this.fiveDayForecastViewModel.getLoadingStatus().observe(
+        this.flightDataViewModel.getLoadingStatus().observe(
                 this,
                 new Observer<LoadingStatus>() {
                     @Override
@@ -199,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         editor.apply();
 
         this.citySearchViewModel.insertSearchCity(citySearch);
-        this.loadForecast();
+        this.loadFlights();
         Log.d(TAG, "LOADED");
 
 
@@ -273,23 +275,15 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "SEARCH: " + search.city + " || " + search.date);
 
         this.citySearchViewModel.insertSearchCity(search);
-        this.loadForecast();
+        this.loadFlights();
     }
 
     /**
      * Triggers a new forecast to be fetched based on current preference values.
      */
-    private void loadForecast() {
-        this.fiveDayForecastViewModel.loadForecast(
-                this.sharedPreferences.getString(
-                        getString(R.string.pref_location_key),
-                        "Corvallis,OR,US"
-                ),
-                this.sharedPreferences.getString(
-                        getString(R.string.pref_units_key),
-                        getString(R.string.pref_units_default_value)
-                ),
-                OPENWEATHER_APPID
+    private void loadFlights() {
+        this.flightDataViewModel.loadFlight(
+                "SFO", "DFW", "2021/03/17"
         );
     }
 
