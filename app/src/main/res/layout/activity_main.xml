@@ -73,9 +73,9 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_cities_list"
+        android:id="@+id/rv_flight_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:background="@color/white"
         android:fitsSystemWindows="true"/>

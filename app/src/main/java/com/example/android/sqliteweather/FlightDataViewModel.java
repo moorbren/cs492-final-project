@@ -16,7 +16,6 @@ public class FlightDataViewModel extends ViewModel {
     public FlightDataViewModel() {
         this.repository = new FlightDataRepository();
         flightData = repository.getRealtimeFlightDataContainer();
-        realtimeFlightDataContainer = repository.getRealtimeFlightDataContainer();
         loadingStatus = repository.getLoadingStatus();
     }
 
