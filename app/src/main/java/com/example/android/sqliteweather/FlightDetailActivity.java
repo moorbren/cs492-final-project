@@ -158,14 +158,18 @@ public class FlightDetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void toggleFavoritedFlight(MenuItem menuItem) {
         if (this.flightData != null) {
-            String depart = LocalDateTime.parse(
+            String time = LocalDateTime.parse(
                     this.flightData.departure.getScheduled(),
                     DateTimeFormatter.ISO_OFFSET_DATE_TIME
             ).format(
                     DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
             );
             String num = this.flightData.flight.getNumber();
-            this.favoritedFlight = new FavoritedFlights(depart + " | " + num);
+            String dn = time + " | " + num;
+            String air = this.flightData.airline.getName();
+            String dep = this.flightData.departure.getAirport();
+            String arr = this.flightData.arrival.getAirport();
+            this.favoritedFlight = new FavoritedFlights(dn,air,dep,arr,num);
             Log.d("departureNum!!!!!!!!!!!", this.favoritedFlight.departureNum);
             this.isFavorited = !this.isFavorited;
             menuItem.setChecked(this.isFavorited);

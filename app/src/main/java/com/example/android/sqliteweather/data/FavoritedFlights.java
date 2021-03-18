@@ -15,18 +15,22 @@ public class FavoritedFlights implements Serializable {
     @NonNull
     public String departureNum;
 
-//    public String airline;
-//
-//    public String departure;
-//
-//    public String arrival;
-//
-//    public String flightNumber;
+    public String airline;
+
+    public String departure;
+
+    public String arrival;
+
+    public String flightNum;
 
 
 
-    public FavoritedFlights (String departureNum) {
+    public FavoritedFlights (String departureNum, String airline, String departure, String arrival, String flightNum) {
         this.departureNum=departureNum;
+        this.airline=airline;
+        this.departure=departure;
+        this.arrival=arrival;
+        this.flightNum=flightNum;
     }
 
 }
