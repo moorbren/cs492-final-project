@@ -28,11 +28,15 @@ public class FlightDetailActivity extends AppCompatActivity {
     ImageView imgClick;
     //private ForecastCity forecastCity = null;
 
+    private boolean isFavorited;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight_detail); //sets layout to specified XML
+
+        isFavorited = false;
         imgClick = (ImageView)findViewById(R.id.itm_alarm);
 
         imgClick.setOnClickListener(new View.OnClickListener() {
@@ -132,9 +136,27 @@ public class FlightDetailActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 //shareForecastText();
                 Log.d("flightdetailtest", "You need to add this to the database when you see this!");
+                toggleFavoritedFlight(item);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Adds the flight to favorited flights and inserts into database
+    private void toggleFavoritedFlight(MenuItem menuItem) {
+        if (this.flightData != null) {
+            this.isFavorited = !this.isFavorited;
+            menuItem.setChecked(this.isFavorited);
+            if (this.isFavorited) {
+                menuItem.setIcon(R.drawable.ic_action_bookmark_checked);
+//                this.viewModel.insertBookmarkedRepo(this.repo);
+                Log.d("toggle test", "Checked!");
+            } else {
+                menuItem.setIcon(R.drawable.bookmark_light);
+                Log.d("toggle test", "Unchecked!");
+//                this.viewModel.deleteBookmarkedRepo(this.repo);
+            }
         }
     }
 
