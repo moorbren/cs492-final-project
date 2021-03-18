@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity
             Uri forecastCityGeoUri = Uri.parse(getString(
                     R.string.geo_uri,
                     0, 0,
-                    "JFK airport hotels"
+                    this.currentArrIata + " airport hotels"
             ));
             Log.d("maps URI", String.valueOf(forecastCityGeoUri));
 
