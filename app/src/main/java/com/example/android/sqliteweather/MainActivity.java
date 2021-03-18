@@ -23,16 +23,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.sqliteweather.data.CitySearch;
 import com.example.android.sqliteweather.data.LoadingStatus;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
 import java.time.LocalDateTime;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity
         implements FlightDataAdapter.OnFlightItemClickListener,
-            SharedPreferences.OnSharedPreferenceChangeListener,
-            CitySearchAdapter.OnCitySearchItemClickListener{
+            SharedPreferences.OnSharedPreferenceChangeListener{
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private FlightDataAdapter flightDataAdapter;
@@ -87,21 +86,6 @@ public class MainActivity extends AppCompatActivity
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onCitySearchItemClick(CitySearch citySearch) {
-        citySearch.date = String.valueOf(LocalDateTime.now());
-
-        SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("pref_location",citySearch.city);
-        editor.apply();
-
-        this.loadFlights();
-        Log.d(TAG, "LOADED");
-
-
-    }
-
     @Override
     public void onFlightItemClick(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
         Intent intent = new Intent(this, FlightDetailActivity.class);
@@ -136,34 +120,16 @@ public class MainActivity extends AppCompatActivity
         this.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected (@NonNull MenuItem item){
-//        this.drawerLayout.closeDrawers();
-//        switch (item.getItemId()) {
-//            case R.id.nav_search:
-//                return true;
-////            case R.id.nav_bookmarked_repos:
-////                Intent bookmarkedReposIntent = new Intent(this,BookmarkedRepos.class);
-////                startActivity(bookmarkedReposIntent);
-////                return true;
-//            case R.id.nav_settings:
-//                Intent settingsIntent = new Intent (this,SettingsActivity.class);
-//                startActivity(settingsIntent);
-//                return true;
-//            default:
-//                return false;
-//        }
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         String city = sharedPreferences.getString("pref_location", "Corvallis");
         String date = String.valueOf(LocalDateTime.now());
-        CitySearch search = new CitySearch();
-        search.city = city;
-        search.date = date;
-        Log.d(TAG, "SEARCH: " + search.city + " || " + search.date);
+        //CitySearch search = new CitySearch();
+        //search.city = city;
+        //search.date = date;
+        //Log.d(TAG, "SEARCH: " + search.city + " || " + search.date);
 
         this.loadFlights();
     }
@@ -175,6 +141,7 @@ public class MainActivity extends AppCompatActivity
         this.flightDataViewModel.getRealtimeFlightDataContainer().observe(
                 this,
                 new Observer<RealtimeFlightDataContainer>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onChanged(RealtimeFlightDataContainer realtimeFlightDataContainer) {
 

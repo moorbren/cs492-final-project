@@ -19,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -60,6 +63,12 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
 
     public void updateFlightData(RealtimeFlightDataContainer flightData) {
         this.flightData = flightData;
+        if(flightData != null && flightData.data != null) {
+            ArrayList<RealtimeFlightDataContainer.RealtimeFlightData> sorted = new ArrayList<>(Arrays.asList(flightData.data));
+            sorted.sort((o1, o2) -> o1.departure.scheduled.compareTo(o2.departure.scheduled));
+            this.flightData.data = sorted.toArray(new RealtimeFlightDataContainer.RealtimeFlightData[sorted.size()]);
+        }
+
         notifyDataSetChanged();
     }
 
@@ -68,6 +77,7 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         final private TextView departureDateTV;
         final private TextView arrivalIataTV;
         final private TextView flightNumTV;
+        final private TextView flightAirlineTV;
 
         public FlightItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +85,7 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
             departureIataTV = itemView.findViewById(R.id.tv_departure_iata);
             arrivalIataTV = itemView.findViewById(R.id.tv_arrival_iata);
             flightNumTV = itemView.findViewById(R.id.tv_flight_number);
+            flightAirlineTV = itemView.findViewById(R.id.tv_flight_airline);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,7 +99,6 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
 
 
         public void bind(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
-
             String s = LocalDateTime.parse(
                     flightData.departure.getScheduled(),
                     DateTimeFormatter.ISO_OFFSET_DATE_TIME
@@ -100,7 +110,7 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
             departureIataTV.setText(flightData.departure.iata);
             arrivalIataTV.setText(flightData.arrival.iata);
             flightNumTV.setText("#" + flightData.flight.number);
+            flightAirlineTV.setText(flightData.airline.name);
         }
-
     }
 }
