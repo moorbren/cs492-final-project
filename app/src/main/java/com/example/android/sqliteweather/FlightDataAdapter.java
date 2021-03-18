@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
 public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.FlightItemViewHolder> {
-    private RealTimeFlightDataContainer flightData;
+    private RealtimeFlightDataContainer.RealtimeFlightData flightData;
     private OnFlightItemClickListener onFlightItemClickListener;
 
     public interface OnFlightItemClickListener {
-        void onFlightItemClick(RealTimeFlightDataContainer flightData);
+        void onFlightItemClick(RealtimeFlightDataContainer.RealtimeFlightData flightData);
     }
 
 
@@ -41,7 +41,7 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         holder.bind(this.flightData.getFlightDataList().get(position));
     }
 
-    public void updateFlightData(RealTimeFlightDataContainer flightData) {
+    public void updateFlightData(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
         this.flightData = flightData;
         notifyDataSetChanged();
     }
