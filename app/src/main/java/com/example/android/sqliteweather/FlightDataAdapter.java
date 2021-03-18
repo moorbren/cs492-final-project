@@ -48,14 +48,10 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
             return this.flightData.data.length;
         }
 
-        Log.w("FlightDataAdapter", "Flight data adapter has no items set!");
-
         return 0;
     }
 
     public void updateFlightData(RealtimeFlightDataContainer flightData) {
-        Log.d("FlightDataAdapter", flightData.toString());
-        //Log.d("FlightDataAdapter", flightData.data[0].aircraft.icao);
         this.flightData = flightData;
         notifyDataSetChanged();
     }
@@ -82,7 +78,6 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         }
 
         public void bind(RealtimeFlightDataContainer.RealtimeFlightData flightData) {
-            Log.d("BIND FUNCTION", flightData.departure.airport);
 
             departureTV.setText(flightData.departure.airport);
             arrivalTV.setText(flightData.arrival.airport);
