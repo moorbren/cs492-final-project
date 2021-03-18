@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
@@ -22,6 +25,7 @@ public class FlightDetailActivity extends AppCompatActivity {
     //public static final String EXTRA_FORECAST_CITY = "FlightDetailActivity.ForecastCity";
 
     private RealtimeFlightDataContainer.RealtimeFlightData flightData = null;
+    ImageView imgClick;
     //private ForecastCity forecastCity = null;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -29,7 +33,14 @@ public class FlightDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight_detail); //sets layout to specified XML
+        imgClick = (ImageView)findViewById(R.id.itm_alarm);
 
+        imgClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("flightdetailtest", "You need to set an alarm when you see this!");
+            }
+        });
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Intent intent = getIntent();
 
@@ -87,6 +98,19 @@ public class FlightDetailActivity extends AppCompatActivity {
                             DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
                     )
             );
+
+            TextView departureHeader = findViewById(R.id.tv_departure_header);
+            departureHeader.setText("Departure Airport");
+            TextView arrivalHeader = findViewById(R.id.tv_arrival_header);
+            arrivalHeader.setText("Arrival Airport");
+            TextView airlineHeader = findViewById(R.id.tv_airline_header);
+            airlineHeader.setText("Airline");
+            TextView flightnoHeader = findViewById(R.id.tv_flightno_header);
+            flightnoHeader.setText("Flight Number");
+            TextView departtimeHeader = findViewById(R.id.tv_departtime_header);
+            departtimeHeader.setText("Departure Time");
+            TextView setAlarm = findViewById(R.id.tv_setalarm);
+            setAlarm.setText("Set an alarm for this flight");
             /*
             ImageView windDirIV = findViewById(R.id.iv_wind_dir);
             windDirIV.setRotation(flightData.getWindDirDeg());
@@ -113,6 +137,8 @@ public class FlightDetailActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     /**
      * This method uses an implicit intent to launch the Android Sharesheet to allow the user to

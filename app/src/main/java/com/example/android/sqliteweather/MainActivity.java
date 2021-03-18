@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
