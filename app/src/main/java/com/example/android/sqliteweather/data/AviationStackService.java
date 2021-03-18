@@ -11,9 +11,6 @@ public interface AviationStackService {
     Call<String> fetchFlight(
             @Query("arr_iata") String arrivalIata,
             @Query("dep_iata") String departureIata,
-
-            //YYYY-MM-DD, EX: 2019-02-31
-            //@Query("flight_date") String destination,
             @Query("access_key") String apiKey
     );
 }

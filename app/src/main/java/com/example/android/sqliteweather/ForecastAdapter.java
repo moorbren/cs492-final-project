@@ -70,9 +70,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             super(itemView);
             dateTV = itemView.findViewById(R.id.tv_date);
             timeTV = itemView.findViewById(R.id.tv_time);
-            highTempTV = itemView.findViewById(R.id.tv_high_temp);
-            lowTempTV = itemView.findViewById(R.id.tv_low_temp);
-            popTV = itemView.findViewById(R.id.tv_pop);
+            highTempTV = itemView.findViewById(R.id.tv_arrival_detailed);
+            lowTempTV = itemView.findViewById(R.id.tv_departure_detailed);
+            popTV = itemView.findViewById(R.id.tv_airline_detailed);
             iconIV = itemView.findViewById(R.id.iv_forecast_icon);
 
             itemView.setOnClickListener(new View.OnClickListener() {

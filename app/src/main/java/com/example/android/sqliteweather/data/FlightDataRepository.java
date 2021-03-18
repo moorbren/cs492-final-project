@@ -68,6 +68,8 @@ public class FlightDataRepository {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if (response.code() == 200) {
+                        Log.d(TAG, "request URL: " + call.request().url());
+
                         RealtimeFlightDataContainer dataContainer = new Gson().fromJson(response.body(), RealtimeFlightDataContainer.class);
                         realtimeFlightDataContainer.setValue(dataContainer);
 
