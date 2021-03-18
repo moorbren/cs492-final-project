@@ -3,6 +3,7 @@ package com.example.android.sqliteweather;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.sqliteweather.data.FavoritedFlights;
+import com.example.android.sqliteweather.data.FavoritedFlightsViewModel;
 import com.example.android.sqliteweather.data.json.RealtimeFlightDataContainer;
 
 import java.text.ParseException;
@@ -26,16 +29,22 @@ public class FlightDetailActivity extends AppCompatActivity {
     //public static final String EXTRA_FORECAST_CITY = "FlightDetailActivity.ForecastCity";
 
     private RealtimeFlightDataContainer.RealtimeFlightData flightData = null;
+    private FavoritedFlights favoritedFlight;
     ImageView imgClick;
     //private ForecastCity forecastCity = null;
 
     private boolean isFavorited;
+    private FavoritedFlightsViewModel viewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.viewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.AndroidViewModelFactory(getApplication())
+        ).get(FavoritedFlightsViewModel.class);
         setContentView(R.layout.activity_flight_detail); //sets layout to specified XML
 
         isFavorited = false;
@@ -49,9 +58,8 @@ public class FlightDetailActivity extends AppCompatActivity {
                     a.setAlarm(flightData.departure.getScheduled(),getApplicationContext());
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Log.d("alarmcall", "Parse error");
+                    Log.d("alarm", "Parse error");
                 }
-                Log.d("flightdetailtest", "You need to set an alarm when you see this!");
             }
         });
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -139,6 +147,7 @@ public class FlightDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -153,18 +162,32 @@ public class FlightDetailActivity extends AppCompatActivity {
     }
 
     // Adds the flight to favorited flights and inserts into database
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void toggleFavoritedFlight(MenuItem menuItem) {
         if (this.flightData != null) {
+            String time = LocalDateTime.parse(
+                    this.flightData.departure.getScheduled(),
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME
+            ).format(
+                    DateTimeFormatter.ofPattern("MMM d uuuu H:mm")
+            );
+            String num = this.flightData.flight.getNumber();
+            String dn = time + " | " + num;
+            String air = this.flightData.airline.getName();
+            String dep = this.flightData.departure.getAirport();
+            String arr = this.flightData.arrival.getAirport();
+            this.favoritedFlight = new FavoritedFlights(dn,air,dep,arr,num);
+            Log.d("departureNum!!!!!!!!!!!", this.favoritedFlight.departureNum);
             this.isFavorited = !this.isFavorited;
             menuItem.setChecked(this.isFavorited);
             if (this.isFavorited) {
                 menuItem.setIcon(R.drawable.ic_action_bookmark_checked);
-//                this.viewModel.insertBookmarkedRepo(this.repo);
                 Log.d("toggle test", "Checked!");
+                this.viewModel.insertFavoritedFlight(this.favoritedFlight);
             } else {
                 menuItem.setIcon(R.drawable.bookmark_light);
                 Log.d("toggle test", "Unchecked!");
-//                this.viewModel.deleteBookmarkedRepo(this.repo);
+                this.viewModel.deleteFavoritedFlight(this.favoritedFlight);
             }
         }
     }

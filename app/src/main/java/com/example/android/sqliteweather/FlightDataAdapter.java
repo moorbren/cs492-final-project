@@ -61,7 +61,9 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         return 0;
     }
 
+
     public void updateFlightData(RealtimeFlightDataContainer flightData) {
+
         this.flightData = flightData;
         if(flightData != null && flightData.data != null) {
             ArrayList<RealtimeFlightDataContainer.RealtimeFlightData> sorted = new ArrayList<>(Arrays.asList(flightData.data));

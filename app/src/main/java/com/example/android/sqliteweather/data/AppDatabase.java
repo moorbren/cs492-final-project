@@ -9,14 +9,14 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {CitySearch.class}, version = 1)
+@Database(entities = {FavoritedFlights.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     private static final int NUM_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUM_THREADS);
 
-    public abstract CitiesDao citiesDao();
+    public abstract FlightsDao flightsDao();
 
     static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -25,12 +25,11 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                             context.getApplicationContext(),
                             AppDatabase.class,
-                       "flights.db"
+                            "flights.db"
                     ).build();
                 }
             }
         }
         return INSTANCE;
     }
-
 }

@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView flightListRv;
     private ProgressBar loadingIndicatorPB;
     private TextView errorMessageTV;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -91,9 +93,26 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.searchbtn_light);
+        actionBar.setHomeAsUpIndicator(R.drawable.searchbtn_light);*/
+
+
+        /*imgClick = findViewById(R.id.itm_alarm);
+
+        imgClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Alarm a = new Alarm();
+                try {
+                    a.setAlarm(flightData.departure.getScheduled(),getApplicationContext());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Log.d("alarmcall", "Parse error");
+                }
+                Log.d("flightdetailtest", "You need to set an alarm when you see this!");
+            }
+        });*/
     }
 
     @Override
@@ -113,14 +132,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        this.currentDepIata = this.dair.getText().toString();
-        this.currentArrIata = this.aair.getText().toString();
-        loadFlights();
+
         switch (item.getItemId()) {
             /*case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;*/
+
             case android.R.id.home:
                 return true;
             case R.id.action_map:
@@ -243,5 +261,10 @@ public class MainActivity extends AppCompatActivity
 //                this.errorToast.show();
 //            }
         }
+
+//    public void onLogOutClick(MenuItem item) {
+//        this.currentDepIata = this.dair.getText().toString();
+//        this.currentArrIata = this.aair.getText().toString();
+//        loadFlights();
     }
 }
